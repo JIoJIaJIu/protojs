@@ -19,10 +19,12 @@ if [ -e antlr-3.2/lib/libantlr3c.a ]; then
 	true
 else
 	MYPWD="$PWD"
-        FLAGS64=
-        if uname -m | grep x86_64 && ! uname | grep Darwin; then
-            FLAGS64=--enable-64bit ;
-        fi
+    FLAGS64=
+
+    if uname -m | grep x86_64 && uname | grep Darwin; then
+        FLAGS64=--enable-64bit ;
+    fi
+
 	tar -zxf libantlr3c-3.2.tar.gz && \
 	cd libantlr3c-3.2 && \
 	./configure --prefix="$MYPWD"/antlr-3.2 $FLAGS64 --disable-shared && \
