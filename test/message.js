@@ -9,7 +9,8 @@ var files = [
     'i64.js',
     'struct/base_types.js',
     'struct/number.js',
-    'struct/message.js'
+    'struct/message.js',
+    'struct/group.js'
 ];
 
 files.forEach(function (file) {
@@ -60,6 +61,14 @@ describe('Message', function () {
     });
 
     var testMessage3 = PROTO.Message('Test_Message3', {
+        'fieldGroup': PROTO.Group('Test_Group1', 1, {
+            'field1': {
+                id: 1,
+                options: {},
+                multiplicity: PROTO.optional,
+                type: function() { return PROTO.int64; }
+            }
+        })
     });
 
     describe('SetField/GetField', function () {
@@ -79,6 +88,16 @@ describe('Message', function () {
             assert.equal(true, message2.field2);
         });
 
+    });
+
+    describe('Group', function () {
+        var message3 = new testMessage3();
+        message3.fieldGroup = {};
+        message3.fieldGroup.field1 = PROTO.I64.fromNumber(1);
+
+        it('shoud return right value', function () {
+            assert.equal(1, message3.fieldGroup.field1);
+        });
     });
 
 });
