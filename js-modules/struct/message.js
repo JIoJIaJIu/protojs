@@ -38,7 +38,7 @@
 PROTO.Message = function(name, properties) {
 
     /** @constructor */
-	function Message () {
+    function Message () {
         this._messageType = name;
         this._properties = properties;
         this._values = {};
@@ -55,19 +55,19 @@ PROTO.Message = function(name, properties) {
             }) (prop, this);
         };
 
-		return this;
+        return this;
     };
 
     for (var key in properties) {
         // HACK: classes are currently included alongside properties.
         if (properties[key].isType) {
             Message[key] = properties[key];
-			if (!properties[key].isGroup)
-				delete properties[key];
+            if (!properties[key].isGroup)
+                delete properties[key];
         };
     };
 
-	Message.prototype = MessagePrototype;
+    Message.prototype = MessagePrototype;
 
     Message.isType = true;
     Message.composite = true;
@@ -106,92 +106,92 @@ PROTO.Message = function(name, properties) {
 };
 
 var MessagePrototype = {
-	MergeFromStream: function MessagePrototype_MergeFromStream(stream) {
-		return PROTO.mergeProperties(this._properties, stream, this._values);
-	},
+    MergeFromStream: function MessagePrototype_MergeFromStream(stream) {
+        return PROTO.mergeProperties(this._properties, stream, this._values);
+    },
 
-	MergeFromArray: function MessagePrototype_MergeFromArray(array) {
-		return this.MergeFromStream(PROTO.CreateArrayStream(array));
-	},
+    MergeFromArray: function MessagePrototype_MergeFromArray(array) {
+        return this.MergeFromStream(PROTO.CreateArrayStream(array));
+    },
 
-	ParseFromStream: function MessagePrototype_ParseFromStream(stream) {
-		this.Clear();
-		return this.MergeFromStream(stream);
-	},
+    ParseFromStream: function MessagePrototype_ParseFromStream(stream) {
+        this.Clear();
+        return this.MergeFromStream(stream);
+    },
 
-	ParseFromArray: function MessagePrototype_ParseFromArray(array) {
-		this.Clear();
-		return this.MergeFromArray(array);
-	},
+    ParseFromArray: function MessagePrototype_ParseFromArray(array) {
+        this.Clear();
+        return this.MergeFromArray(array);
+    },
 
-	SerializeToStream: function MessagePrototype_SerializeToStream(outstream) {
-		var hasFields = this.computeHasFields();
-		for (var propname in hasFields) {
-			var val = this.GetField(propname);
-			PROTO.serializeProperty(this._properties[propname], outstream, val);
-		};
-	},
+    SerializeToStream: function MessagePrototype_SerializeToStream(outstream) {
+        var hasFields = this.computeHasFields();
+        for (var propname in hasFields) {
+            var val = this.GetField(propname);
+            PROTO.serializeProperty(this._properties[propname], outstream, val);
+        };
+    },
 
-	SerializeToArray: function MessagePrototype_SerializeToArray(arr) {
-		var stream = new PROTO.ByteArrayStream(arr);
-		this.SerializeToStream(stream);
-		return stream.getArray();
-	},
+    SerializeToArray: function MessagePrototype_SerializeToArray(arr) {
+        var stream = new PROTO.ByteArrayStream(arr);
+        this.SerializeToStream(stream);
+        return stream.getArray();
+    },
 
-	IsInitialized: function MessagePrototype_IsInitialized() {
-		var checked_any = false;
+    IsInitialized: function MessagePrototype_IsInitialized() {
+        var checked_any = false;
 
-		for (var key in this._properties) {
-			checked_any = true;
+        for (var key in this._properties) {
+            checked_any = true;
 
-			if (this._values[key] !== undefined) {
-				var prop = this._properties[key];
+            if (this._values[key] !== undefined) {
+                var prop = this._properties[key];
 
-				if (typeof prop.type !== "function" || !prop.type())
+                if (typeof prop.type !== "function" || !prop.type())
                     continue;
 
-				if (prop.multiplicity === PROTO.repeated) {
-					if (PROTO.array.IsInitialized(this.values_[key])) {
-						return true;
-					};
-				} else {
+                if (prop.multiplicity === PROTO.repeated) {
+                    if (PROTO.array.IsInitialized(this.values_[key])) {
+                        return true;
+                    };
+                } else {
                     //TODO: refactoring
-					if (!prop.type().IsInitialized ||
-						prop.type().IsInitialized(this._values[key]))
-					{
-						return true;
-					}
-				};
-			}
-		};
+                    if (!prop.type().IsInitialized ||
+                        prop.type().IsInitialized(this._values[key]))
+                    {
+                        return true;
+                    }
+                };
+            }
+        };
 
-		// As a special case, if there weren't any fields, we
-		// treat it as initialized. This allows us to send
-		// messages that are empty, but whose presence indicates
-		// something.
-		if (!checked_any) return true;
-		// Otherwise, we checked at least one and it failed, so we
-		// must be uninitialized.
-		return false;
-	},
+        // As a special case, if there weren't any fields, we
+        // treat it as initialized. This allows us to send
+        // messages that are empty, but whose presence indicates
+        // something.
+        if (!checked_any) return true;
+        // Otherwise, we checked at least one and it failed, so we
+        // must be uninitialized.
+        return false;
+    },
 
-	GetField: function MessagePrototype_GetField(propname) {
-		var ret = this._values[propname];
+    GetField: function MessagePrototype_GetField(propname) {
+        var ret = this._values[propname];
 
         //TODO: legacy
-		var type = this._properties[propname].type && this._properties[propname].type();
-		if (ret && type && type.FromProto) {
-			return type.FromProto(ret);
-		};
+        var type = this._properties[propname].type && this._properties[propname].type();
+        if (ret && type && type.FromProto) {
+            return type.FromProto(ret);
+        };
 
-		return ret;
-	},
+        return ret;
+    },
 
-	SetField: function MessagePrototype_SetField(propname, value) {
-		if (value === undefined || value === null) {
-			this.ClearField(propname);
+    SetField: function MessagePrototype_SetField(propname, value) {
+        if (value === undefined || value === null) {
+            this.ClearField(propname);
             return;
-		};
+        };
 
         var prop = this._properties[propname];
 
@@ -204,124 +204,124 @@ var MessagePrototype = {
         } else {
             this._values[propname] = prop.type().Convert(value);
         };
-	},
+    },
 
-	computeHasFields: function computeHasFields() {
-		var hasFields = {};
+    computeHasFields: function computeHasFields() {
+        var hasFields = {};
 
-		for (var key in this._properties) {
-			if (this.HasField(key)) {
-				hasFields[key] = true;
-			};
-		};
+        for (var key in this._properties) {
+            if (this.HasField(key)) {
+                hasFields[key] = true;
+            };
+        };
 
-		return hasFields;
-	},
+        return hasFields;
+    },
 
-	HasField: function MessagePrototype_HasField(propname) {
-		if (this._values[propname] !== undefined) {
-			var prop = this._properties[propname];
-			if (!prop.type()) {
-				return false;
-			};
+    HasField: function MessagePrototype_HasField(propname) {
+        if (this._values[propname] !== undefined) {
+            var prop = this._properties[propname];
+            if (!prop.type()) {
+                return false;
+            };
 
-			if (prop.multiplicity === PROTO.repeated) {
-				return PROTO.array.IsInitialized(this._values[propname]);
-			} else {
+            if (prop.multiplicity === PROTO.repeated) {
+                return PROTO.array.IsInitialized(this._values[propname]);
+            } else {
                 //TODO: refactoring
-				if (!prop.type().IsInitialized ||
-					prop.type().IsInitialized(
-						this._values[propname]))
-				{
-					return true;
-				}
-			};
-		};
+                if (!prop.type().IsInitialized ||
+                    prop.type().IsInitialized(
+                        this._values[propname]))
+                {
+                    return true;
+                }
+            };
+        };
 
-		return false;
-	},
+        return false;
+    },
 
-	Clear: function Clear() {
-		for (var prop in this._properties) {
-			this.ClearField(prop);
-		};
-	},
+    Clear: function Clear() {
+        for (var prop in this._properties) {
+            this.ClearField(prop);
+        };
+    },
 
-	ClearField: function ClearField(propname) {
-		var prop = this._properties[propname];
+    ClearField: function ClearField(propname) {
+        var prop = this._properties[propname];
 
-		if (prop.multiplicity === PROTO.repeated) {
-			this._values[propname] = new PROTO.array(prop);
-		} else {
-			delete this._values[propname];
-		};
+        if (prop.multiplicity === PROTO.repeated) {
+            this._values[propname] = new PROTO.array(prop);
+        } else {
+            delete this._values[propname];
+        };
     },
     
-	toString: function toString(level) {
-		var spaces = "";
-		var str = "";
+    toString: function toString(level) {
+        var spaces = "";
+        var str = "";
 
-		if (level) {
-			str = "{\n";
-			for (var i = 0 ; i < level * 2; i++) {
-				spaces += " ";
-			};
-		} else {
-			level = 0;
-		};
+        if (level) {
+            str = "{\n";
+            for (var i = 0 ; i < level * 2; i++) {
+                spaces += " ";
+            };
+        } else {
+            level = 0;
+        };
 
-		for (var propname in this._properties) {
-			if (!this.HasField(propname))
-				continue;
+        for (var propname in this._properties) {
+            if (!this.HasField(propname))
+                continue;
 
             var prop = this._properties[propname];
 
-			if (typeof prop.type !== "function" || !prop.type())
+            if (typeof prop.type !== "function" || !prop.type())
                 continue;
 
-			if (prop.multiplicity === PROTO.repeated) {
-				var arr = this._values[propname];
-				for (var i = 0, length = arr.length; i < length; i++) {
-					str += this._formatValue(level, spaces, propname, arr[i]);
-				};
-			} else {
-				str += this._formatValue(level, spaces, propname, this._values[propname]);
-			};
-		};
+            if (prop.multiplicity === PROTO.repeated) {
+                var arr = this._values[propname];
+                for (var i = 0, length = arr.length; i < length; i++) {
+                    str += this._formatValue(level, spaces, propname, arr[i]);
+                };
+            } else {
+                str += this._formatValue(level, spaces, propname, this._values[propname]);
+            };
+        };
 
-		if (level) {
-			str += "}\n";
-		};
+        if (level) {
+            str += "}\n";
+        };
 
-		return str;
-	},
+        return str;
+    },
 
-	_formatValue: function(level, spaces, propname, val) {
-		var str = spaces + propname;
-		var type = this._properties[propname].type();
+    _formatValue: function(level, spaces, propname, val) {
+        var str = spaces + propname;
+        var type = this._properties[propname].type();
 
-		if (type.composite) {
-			str += " " + val.toString(level + 1);
-		} else if (typeof val === 'string') {
-			var myval = val;
-			myval = myval.replace("\"", "\\\"")
-						 .replace("\n", "\\n")
-						 .replace("\r","\\r");
-			str += ": \"" + myval + "\"\n";
-		} else {
-			if (type.FromProto) {
-				val = type.FromProto(val);
-			};
+        if (type.composite) {
+            str += " " + val.toString(level + 1);
+        } else if (typeof val === 'string') {
+            var myval = val;
+            myval = myval.replace("\"", "\\\"")
+                         .replace("\n", "\\n")
+                         .replace("\r","\\r");
+            str += ": \"" + myval + "\"\n";
+        } else {
+            if (type.FromProto) {
+                val = type.FromProto(val);
+            };
 
-			if (type.toString) {
-				var myval = type.toString(val);
-				str += ": " + myval + "\n";
-			} else {
-				str += ": " + val + "\n";
-			};
-		};
-		return str;
-	}
+            if (type.toString) {
+                var myval = type.toString(val);
+                str += ": " + myval + "\n";
+            } else {
+                str += ": " + val + "\n";
+            };
+        };
+        return str;
+    }
 }
 
 }) (PROTO);
