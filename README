@@ -1,7 +1,7 @@
 Protojs is a BSD-licensed protocol buffer library written in JavaScript.
-http://github.com/sirikata/protojs
+forked from http://github.com/sirikata/protojs
 
-==== Features:
+## Features:
 
 * Fast compiler using ANTLR
 * Packed field + 2.3.0 autodetection
@@ -23,7 +23,7 @@ http://github.com/sirikata/protojs
 * No support for extensions or services
 * Not compatible with older versions of protobufs
 
-==== Building protojs:
+## Building protojs:
 
 The build process is tested on Linux, and should work also on mac or cygwin:
 First, run "./bootstrap.sh"
@@ -65,10 +65,22 @@ Note that the function names are ParseFromStream and SerializeToStream, not
 ParseFromString or ParseFromArray as in python or C++. This is because
 javascript strings are encoded in UTF-16 and cannot handle binary data.
 
+
+### Structs
+
+Each struct should implement some interface that looks like
+%%
+isInitialized()
+Convert()
+SerializeToStream()
+ParseFromStream()
+%%
+
 ==== Reporting bugs:
 
 Send mail to Patrick Horn <patrick.horn@gmail.com>, or find me at
 irc.freenode.net #sirikata
+Forked by jiojiajiu <jiojiaji@gmail.com>
 
 If you have a cool feature to add, feel free to fork the project.
 
