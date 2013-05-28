@@ -90,6 +90,27 @@ describe('Message', function () {
 
     });
 
+    describe('Covert', function () {
+        var message1 = {
+            field1: "XYZ",
+            field2: PROTO.I64.fromNumber(5)
+        };
+
+        var message2 = {
+            field1: {
+                field1: "ABC"
+            },
+            field2: false
+        };
+
+        it('should return right value', function () {
+            assert.equal("XYZ", message1.field1);
+            assert.equal(5, message1.field2);
+            assert.equal("ABC", message2.field1.field1);
+            assert.equal(false, message2.field2);
+        });
+    });
+
     describe('Group', function () {
         var message3 = new testMessage3();
         message3.fieldGroup = {};

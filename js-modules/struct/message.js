@@ -95,12 +95,16 @@ PROTO.Message = function(name, properties) {
     };
 
     Message.Convert = function Convert(val) {
-        if (!(val instanceof Message)) {
-            
-            var errmsg = "Unknown Error: Value not instanceof Message: "+typeof(val)+" : "+val+" instanceof "+(val instanceof Message);
-            PROTO.warn(errmsg);//this should not happen, but occasionally it does
-        }
-        return val;
+        if (val instanceof Message);
+            return val;
+
+        var obj = new Message();
+        if (typeof val === "object") {
+            for (var key in val) {
+                obj.SetField(key, val[key]);
+            };
+        };
+        return obj;
     };
 
     Message.SerializeToStream = function(value, stream) {
