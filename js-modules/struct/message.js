@@ -35,9 +35,25 @@
 
 (function (PROTO, undefined) {
 
+/**
+ *
+ * Message example:
+ *
+ * PROTO.Message({
+ *   NestedMessage: PROTO.Message({
+ *   ...
+ *   }),
+ *   name : {
+ *     id: 1,
+ *     multiplicity: PROTO.optional,
+ *     options: {},
+ *     type: function() { return PROTO.int64; }
+ *   }
+ * });
+ *
+ **/
 PROTO.Message = function(name, properties) {
 
-    /** @constructor */
     function Message () {
         this._messageType = name;
         this._properties = properties;
