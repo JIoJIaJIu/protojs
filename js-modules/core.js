@@ -2,6 +2,7 @@
  *  protobuf.js
  *
  *  Copyright (c) 2009-2010, Patrick Reiter Horn
+ *                2013, Guro jiojiajiu Bokum
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -35,13 +36,11 @@
 var PROTO = {
 
 	warn: function (s) {
-		PROTO.log("!!WARN!! " + s);
+		PROTO.log("Warning: " + s);
 	},
 
 	log: function (s) {
-		if (typeof self.console !== "undefined" && self.console.log) {
-			self.console.log(s); 
-		};
+        throw new Error("PROTO.log should be overriden");
 	},
 
 	encodeUTF8: function(str) {
@@ -480,21 +479,9 @@ function init() {
 	* -- stream/base.js
 	* -- stream/**
 	**/
-	initLogger();
-};
-
-function initLogger() { 
-	if (typeof self.console === "undefined")
-		self.console = {};
-	if (typeof self.console.log ==="undefined") {
-		self.console.log = function(message) {
-			if (document && document.body)
-				document.body.appendChild(document.createTextNode(message + "..."));
-		};
-	};
 };
 
 GLOBAL.PROTO = PROTO;
 init();
 
- }) (window);
+ }) (this);
