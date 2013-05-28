@@ -39,7 +39,7 @@
  *
  * Message example:
  *
- * PROTO.Message({
+ * PROTO.Message('MessageName', {
  *   NestedMessage: PROTO.Message({
  *   ...
  *   }),
@@ -210,6 +210,8 @@ var MessagePrototype = {
         };
 
         var prop = this._properties[propname];
+        if (!prop)
+            return;
 
         if (prop.multiplicity === PROTO.repeated) {
             this.ClearField(propname);
@@ -338,6 +340,8 @@ var MessagePrototype = {
         };
         return str;
     }
-}
+};
+
+PROTO.MessagePrototype = MessagePrototype;
 
 }) (PROTO);
