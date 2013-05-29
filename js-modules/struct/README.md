@@ -96,7 +96,7 @@ There is 1 constraints in javascript implementation:
 
 ### Groups (deprecated)
 
-### Serializing
+### Serializing (encoding)
 There is 2 types of serializing:
   * [to Steam](/js-modules/stream/README.md)
   * to Array
