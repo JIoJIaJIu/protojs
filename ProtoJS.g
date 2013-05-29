@@ -411,13 +411,9 @@ group
     (multiplicity_group GROUP group_name EQUALS group_offset BLOCK_OPEN (at_least_one_group_element)? BLOCK_CLOSE
     ->  WS["\t"] group_name COLON[":"] WS[" "] QUALIFIEDIDENTIFIER["PROTO.Group"] PAREN_OPEN["("] 
     	QUOTE["\""] QUALIFIEDIDENTIFIER[qualifyType(ctx, $group_name.text, $group_name.text)] QUOTE["\""]
-        COMMA[","] BLOCK_OPEN["{"] WS["\n\t\t"] IDENTIFIERCOLON["id:"] WS[" "] group_offset COMMA[","]
-            WS["\n\t\t"] IDENTIFIERCOLON["type:"] WS[" "] IDENTIFIER["function"] PAREN_OPEN["("]PAREN_CLOSE[")"]
-                BLOCK_OPEN["{"] IDENTIFIER["return"] WS[" "] QUALIFIEDIDENTIFIER[qualifyType(ctx, $group_name.text, $group_name.text)] ITEM_TERMINATOR[";"]
-                BLOCK_CLOSE["}"] WS["\n\t"]
-            BLOCK_CLOSE["}"]
-    	COMMA[","] BLOCK_OPEN["{"] WS["\n\t"] at_least_one_group_element
-    	BLOCK_CLOSE["}"] PAREN_CLOSE[")"])
+        COMMA[","] WS[" "] group_offset COMMA[","] WS[" "] BLOCK_OPEN["{"]
+            WS["\n\t"] at_least_one_group_element
+        BLOCK_CLOSE["}"] PAREN_CLOSE[")"])
         {
             defineType(ctx, $group_name.text, TYPE_ISGROUP);
             //fieldJSDecl((char *)"optional", (char *)"name", (char *)"1");
