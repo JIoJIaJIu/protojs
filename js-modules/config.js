@@ -16,6 +16,7 @@ PROTO.repeated = 'repeated';
 PROTO.required = 'required';
 
 PROTO.pow32 = Math.pow(2, 32); 
+PROTO.pow3 = Math.pow(2, 3);
 PROTO.upow32 = (Math.pow(2, 32) / 2) - 1;
 
 }) (PROTO)

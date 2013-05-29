@@ -31,6 +31,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 "use strict";
+
 (function (GLOBAL, undefined) {
 
 var PROTO = {
@@ -373,17 +374,28 @@ var PROTO = {
 		return true;
 	},
 
-	serializeProperty: function(property, stream, value) {
-		var fid = property.id;
-		if (!property.type()) return;
-		if (property.type().cardinality > 1) {
-			PROTO.serializeTupleProperty(property,stream,value);
-			return;
-		}
-		var wiretype = property.type().wiretype;
-		var wireId = fid * 8 + wiretype;
+    /**
+     * Serializing property with value to stream
+     *
+     */
+	serializeProperty: function(prop, stream, value) {
+		var fid = prop.id;
+        var type = prop.type && prop.type();
 
-		PROTO.log("Serializing property "+fid+" as "+wiretype+" pos is "+stream.write_pos_);
+		if (!type)
+            return;
+
+        // TODO: legacy 
+		if (type.cardinality > 1) {
+			PROTO.serializeTupleProperty(prop, stream, value);
+			return;
+		};
+
+		var wiretype = type.wiretype;
+		var wireId = fid * PROTO.pow3 + wiretype;
+
+		PROTO.log("Serializing property " + fid + " as " + wiretype + " pos is " + stream.write_pos_);
+
 		if (property.multiplicity == PROTO.repeated) {
 			if (wiretype != PROTO.wiretypes.lengthdelim && property.options.packed) {
 				var bytearr = new Array();
