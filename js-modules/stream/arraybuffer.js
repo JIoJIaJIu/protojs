@@ -32,7 +32,7 @@
  */
 "use strict";
 
-(function (PROTO, undefined) {
+(function (PROTO, GLOBAL, undefined) {
 
 if (typeof ArrayBuffer === "undefined") {
 	PROTO.warn("There is no ArrayBuffer implementation");
@@ -123,45 +123,46 @@ PROTO.ArrayBufferStream.prototype.getUint8Array = function() {
 	return new Uint8Array(this.array_buffer_, 0, this.length_);
 };
 
-//TODO: wtf?
-	(function() {
-		var useBlobCons = false;
-		var BlobBuilder = null;
-		var slice = "slice";
-		var testBlob;
-		try {
-			testBlob = new self.Blob([new DataView(new ArrayBuffer(1))]);
-			useBlobCons = true;
-		} catch (e) {
-			/**
-			 * @suppress {missingProperties} self
-			 */
-			BlobBuilder = self.BlobBuilder || 
-				self["WebKitBlobBuilder"] || self["MozBlobBuilder"] || self["MSBlobBuilder"];
-			try {
-				testBlob = new BlobBuilder().getBlob();
-			}catch (f) {
-				//in a worker in FF or blobs not supported
-			}
-		}
-		if (testBlob && (useBlobCons || BlobBuilder)) {
-			if (testBlob.webkitSlice && !testBlob.slice) {
-				slice = "webkitSlice";
-			} else if (testBlob.mozSlice && !testBlob.slice) {
-				slice = "mozSlice";
-			}
-			PROTO.ArrayBufferStream.prototype.getBlob = function() {
-			var fullBlob;
-			if (useBlobCons) {
-				fullBlob = new self.Blob([new DataView(this.array_buffer_)]);
-			} else {
-				var blobBuilder = new BlobBuilder();
-				blobBuilder.append(this.array_buffer_);
-				fullBlob = blobBuilder.getBlob();
-			}
-			return fullBlob[slice](0, this.length_);
-			};
-		}
-	}());
+(function() {
+    var useBlobCons = false;
+    var BlobBuilder = null;
+    var slice = "slice";
+    var testBlob;
 
-}) (PROTO);
+    try {
+        testBlob = new GLOBAL.Blob([new DataView(new ArrayBuffer(1))]);
+        useBlobCons = true;
+    } catch (e) {
+        /**
+         * @suppress {missingProperties} self
+         */
+        BlobBuilder = GLOBAL.BlobBuilder || 
+            GLOBAL["WebKitBlobBuilder"] || GLOBAL["MozBlobBuilder"] || GLOBAL["MSBlobBuilder"];
+        try {
+            testBlob = new BlobBuilder().getBlob();
+        } catch (f) {
+            //in a worker in FF or blobs not supported
+        }
+    };
+
+    if (testBlob && (useBlobCons || BlobBuilder)) {
+        if (testBlob.webkitSlice && !testBlob.slice) {
+            slice = "webkitSlice";
+        } else if (testBlob.mozSlice && !testBlob.slice) {
+            slice = "mozSlice";
+        }
+        PROTO.ArrayBufferStream.prototype.getBlob = function() {
+        var fullBlob;
+        if (useBlobCons) {
+            fullBlob = new GLOBAL.Blob([new DataView(this.array_buffer_)]);
+        } else {
+            var blobBuilder = new BlobBuilder();
+            blobBuilder.append(this.array_buffer_);
+            fullBlob = blobBuilder.getBlob();
+        }
+        return fullBlob[slice](0, this.length_);
+        };
+    }
+}());
+
+}) (PROTO, this);

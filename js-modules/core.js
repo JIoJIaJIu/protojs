@@ -378,16 +378,16 @@ var PROTO = {
      * Serializing property with value to stream
      *
      */
-	serializeProperty: function(prop, stream, value) {
-		var fid = prop.id;
-        var type = prop.type && prop.type();
+	serializeProperty: function(property, stream, value) {
+		var fid = property.id;
+        var type = property.type && property.type();
 
 		if (!type)
             return;
 
         // TODO: legacy 
 		if (type.cardinality > 1) {
-			PROTO.serializeTupleProperty(prop, stream, value);
+			PROTO.serializeTupleProperty(property, stream, value);
 			return;
 		};
 

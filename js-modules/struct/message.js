@@ -208,6 +208,8 @@ var MessagePrototype = {
     },
 
     SetField: function MessagePrototype_SetField(propname, value) {
+        PROTO.log("SetField " + propname + " " + value);
+
         if (value === undefined || value === null) {
             this.ClearField(propname);
             return;
