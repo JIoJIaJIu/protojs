@@ -95,3 +95,8 @@ There is 1 constraints in javascript implementation:
 
 
 ### Groups (deprecated)
+
+### Serializing
+There is 2 types of serializing:
+  * ((/js-modules/stream/README.md toStream))
+  * toArray
