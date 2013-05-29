@@ -98,5 +98,5 @@ There is 1 constraints in javascript implementation:
 
 ### Serializing
 There is 2 types of serializing:
-  * ((/js-modules/stream/README.md toStream))
-  * toArray
+  * [to Steam](/js-modules/stream/README.md)
+  * to Array
