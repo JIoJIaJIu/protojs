@@ -4,7 +4,7 @@
 
 Protobuf declaration:
 
-`
+```protobuf
 package AddressBook;
 
 message Person {
@@ -25,11 +25,11 @@ message Person {
 
   repeated PhoneNumber phone = 4;
 }
-`
+```
 
 Javascript Protobuf declaration:
 
-`
+```javascript
 var AddressBook;
 if (typeof AddressBook === "undefined")
     AddressBook = {};
@@ -88,7 +88,8 @@ AddressBook.Person = PROTO.message("AddressBook.Person", {
         type: function() { return AddressBook.Person.PhoneNumber; }
     }
 });
-`
+```
+
 There is 1 constraints in javascript implementation:
   1.  field name could not be same as name of inner Message or inner Enum:
 
