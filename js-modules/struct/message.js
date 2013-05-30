@@ -171,7 +171,7 @@ var MessagePrototype = {
                     continue;
 
                 if (prop.multiplicity === PROTO.repeated) {
-                    if (PROTO.array.IsInitialized(this.values_[key])) {
+                    if (PROTO.array.IsInitialized(this._values[key])) {
                         return true;
                     };
                 } else {
@@ -221,9 +221,10 @@ var MessagePrototype = {
 
         if (prop.multiplicity === PROTO.repeated) {
             this.ClearField(propname);
+
             for (var i = 0, length = value.length; i < length; i++) {
-                var value = prop.type().Convert(value[i]);
-                this._values[propname].push(value);
+                var val = prop.type().Convert(value[i]);
+                this._values[propname].push(val);
             }
         } else {
             this._values[propname] = prop.type().Convert(value);
