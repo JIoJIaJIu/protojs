@@ -4,42 +4,47 @@
 
 PROTO.array = (function() {
 	/** @constructor */
-	function ProtoArray(datatype, input) {
-		this.datatype_ = datatype.type();
+	function ProtoArray(prop, input) {
+		this._datatype = prop.type();
 		this.length = 0;
+
 		if (PROTO.IsArray(input)) {
-			for (var i=0;i<input.length;++i) {
+			for (var i = 0; i < input.length; ++i) {
 				this.push(input[i]);
-			}
-		}
+			};
+		};
 	};
+
 	ProtoArray.IsInitialized = function IsInitialized(val) {
 		return val.length > 0;
 	};
+
 	ProtoArray.prototype.push = function (var_args) {
 		if (arguments.length === 0) {
-			if (this.datatype_.composite) {
-				var newval = new this.datatype_;
+			if (this._datatype.composite) {
+				var newval = new this._datatype;
 				this[this.length++] = newval;
 				return newval;
 			} else {
 				throw "Called add(undefined) for a non-composite";
-			}
+			};
 		} else {
 			for (var i = 0; i < arguments.length; i++) {
-				var newval = this.datatype_.Convert(arguments[i]);
-				if (this.datatype_.FromProto) {
-					newval = this.datatype_.FromProto(newval);
+				var newval = this._datatype.Convert(arguments[i]);
+				if (this._datatype.FromProto) {
+					newval = this._datatype.FromProto(newval);
 				}
 				this[this.length++] = newval;
-			}
-		}
+			};
+		};
+
 		return arguments[0];
-	}
+	};
+
 	ProtoArray.prototype.set = function (index, newval) {
-		newval = this.datatype_.Convert(newval);
-		if (this.datatype_.FromProto) {
-			newval = this.datatype_.FromProto(newval);
+		newval = this._datatype.Convert(newval);
+		if (this._datatype.FromProto) {
+			newval = this._datatype.FromProto(newval);
 		}
 		if (index < this.length && index >= 0) {
 			this[index] = newval;
@@ -49,10 +54,12 @@ PROTO.array = (function() {
 			throw "Called ProtoArray.set with index "+index+" higher than length "+this.length;
 		}
 		return newval;
-	}
+	};
+
 	ProtoArray.prototype.clear = function (index, newval) {
 		this.length = 0;
 	};
+
 	return ProtoArray;
 })();
 
