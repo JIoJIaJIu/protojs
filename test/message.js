@@ -71,6 +71,29 @@ describe('Message', function () {
         })
     });
 
+    var testMessage4 = PROTO.Message('Test_Message4', {
+        NestedMessage: PROTO.Message('Test_NestedMessage', {
+            'field1': {
+                id: 1,
+                options: {},
+                multiplicity: PROTO.optional,
+                type: function() {return PROTO.int64; }
+            }
+        }),
+        'field1': {
+            id: 2,
+            options: {},
+            multiplicity: PROTO.repeated,
+            type: function() { return testMessage4.NestedMessage; }
+        },
+        'field2': {
+            id: 3,
+            options: {},
+            multiplicity: PROTO.repeated,
+            type: function() { return PROTO.string; }
+        }
+    });
+
     describe('SetField/GetField', function () {
         var message1 = new testMessage1();
         message1.field1 = "value one";
@@ -121,4 +144,22 @@ describe('Message', function () {
         });
     });
 
+    describe('PROTO.repeated', function () {
+        var message4 = new testMessage4();
+        message4.field1 = [];
+        message4.field1.push(new testMessage4.NestedMessage());
+        message4.field1[0].field1 = PROTO.I64.fromNumber(-23);
+        message4.field1.push({field1: PROTO.I64.fromNumber(123)});
+
+        message4.field2 = ["firstValue", "secondValue", "tree"];
+
+        it ('should return right value', function () {
+            assert.equal(-23, message4.field1[0].field1);
+            assert.equal(123, message4.field1[1].field1);
+
+            assert.equal("firstValue", message4.field2[0]);
+            assert.equal("secondValue", message4.field2[1]);
+            assert.equal("tree", message4.field2[2]);
+        });
+    });
 });
