@@ -54,8 +54,8 @@ PROTO.BinaryParser.prototype.encodeInt = function(number, bits, signed){
 (function () {
     var buffer8byte = new ArrayBuffer(8);
     var buffer4byte = new ArrayBuffer(4);
-    var f64buffer = new DataView(buffer8byte,0,8);
-    var f32buffer = new DataView(buffer4byte,0,4);
+    var f64buffer = new Float64Array(buffer8byte,0,8);
+    var f32buffer = new Float32Array(buffer4byte,0,4);
     var u8buffer64 = new Uint8Array(buffer8byte);
     var u8buffer32 = new Uint8Array(buffer4byte);
     PROTO.BinaryParser.prototype.encodeFloat32 = function(data) {
