@@ -411,7 +411,7 @@ group
     (multiplicity_group GROUP group_name EQUALS group_offset BLOCK_OPEN (at_least_one_group_element)? BLOCK_CLOSE
     ->  WS["\t"] group_name COLON[":"] WS[" "] QUALIFIEDIDENTIFIER["PROTO.Group"] PAREN_OPEN["("] 
     	QUOTE["\""] QUALIFIEDIDENTIFIER[qualifyType(ctx, $group_name.text, $group_name.text)] QUOTE["\""]
-        COMMA[","] WS[" "] group_offset COMMA[","] WS[" "] BLOCK_OPEN["{"]
+        COMMA[","] WS[" "] group_offset COMMA[","] WS[" "] QUALIFIEDIDENTIFIER["PROTO."]multiplicity_group COMMA[","] WS[" "] BLOCK_OPEN["{"]
             WS["\n\t"] at_least_one_group_element
         BLOCK_CLOSE["}"] PAREN_CLOSE[")"])
         {
